@@ -12,24 +12,24 @@ k = 185  # Constante elástica de la cuerda (N/m)
 b = 75  # Coeficiente de amortiguación (Ns/m)
 tam_cuerda = 10  # Longitud de la cuerda (m)
 
-# Arrays para almacenar resultados
-pos = np.zeros(len(t_eval))  # Posición
-vel = np.zeros(len(t_eval))  # Velocidad
-accel = np.zeros(len(t_eval))  # Aceleración
+# Resultados
+pos = np.zeros(len(t_eval))  
+vel = np.zeros(len(t_eval))  
+accel = np.zeros(len(t_eval))  
 
 # Condiciones iniciales
-pos[0] = y0[0]  # Posición inicial
-vel[0] = y0[1]  # Velocidad inicial
-accel[0] = -g  # Aceleración inicial (gravedad)
+pos[0] = y0[0]  
+vel[0] = y0[1]  
+accel[0] = -g  
 
 # Función para calcular la aceleración
 def calcular_aceleracion(pos_actual, vel_actual):
     if pos_actual >= y0[0] - tam_cuerda:
-        # Fase de caída libre (solo gravedad)
+        # caída libre (solo gravedad)
         return -g
     else:
         # Fase elástica (cuerda estirada)
-        stretch = (y0[0] - tam_cuerda) - pos_actual  # Estiramiento de la cuerda
+        stretch = (y0[0] - tam_cuerda) -pos_actual  # Estiramiento de la cuerda y0[0] - tam_cuerda me dice a partir de cuando se estira la cuerda y al restarle la pos_actual se cuanto se estira en cada momento, es decir la distancia en la que esta ejerciendo fuerza elastica
         return -g + (k / m) * stretch - (b / m) * vel_actual
 
 # Bucle principal de Euler
