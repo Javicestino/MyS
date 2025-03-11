@@ -1,43 +1,44 @@
 import numpy as np
-import sim # no hace falta en coppellia simplemente para que no salgan errores
+
 
 def sysCall_init():
-    global object_handle, g, m, k, b, tam_cuerda, dt, pos, vel
+    sim = require('sim')
+    global object_handle, g, m, k, b, tam_cuerda, dt, pos, vel, pos_ini
 
     # Obtener handle del objeto (nombre en la escena)
-    object_handle = sim.getObject('/puenting')
+    object_handle = sim.getObject('/Cubo')
 
-    # Parámetros físicos
+    # Parametros
     g = 9.81   # Gravedad (m/s^2)
     m = 80.0   # Masa de la persona (kg)
-    k = 185.0  # Constante elástica de la cuerda (N/m)
-    b = 75.0   # Coeficiente de amortiguación (Ns/m)
+    k = 185.0  # Constante el?stica de la cuerda (N/m)
+    b = 75.0   # Coeficiente de amortiguaci?n (Ns/m)
     tam_cuerda = 10.0  # Longitud de la cuerda (m)
-    
+    pos_ini = 20
     # Condiciones iniciales
-    pos = 20.0  # Altura inicial (m)
+    pos = pos_ini  # Altura inicial (m)
     vel = 0.0   # Velocidad inicial (m/s)
 
-    # Configurar la posición inicial del objeto en CoppeliaSim
+    # Configurar la posicion inicial del objeto en CoppeliaSim
     sim.setObjectPosition(object_handle, -1, [0, 0, pos])
-
-def calcular_aceleracion(pos_actual, vel_actual):
-    """Calcula la aceleración en cada instante."""
-    if pos_actual >= 20 - tam_cuerda:
-        return -g  # Caída libre
+   
+def calcular_aceleracion(pos_actual,vel_actual):
+    # Calcular aceleracion para cada h
+    if pos_actual >= pos_ini - tam_cuerda:
+        return -g # Caida libre
     else:
-        stretch = (20 - tam_cuerda) - pos_actual  # Estiramiento de la cuerda
-        return -g + (k / m) * stretch - (b / m) * vel_actual  # Fuerzas elásticas y de amortiguación
-
+        stretch = (pos_ini - tam_cuerda) - pos_actual # Lo que se ha estirado mi cuerda
+        return -g + (k/m) * stretch - (b/m) * vel_actual
+       
 def sysCall_actuation():
     global pos, vel
 
-    dt = sim.getSimulationTimeStep()  # Obtener paso de simulación
+    dt = sim.getSimulationTimeStep()  # Obtener paso de simulaci?n
 
-    # Calcular aceleración
+    # Calcular aceleraci?n
     accel = calcular_aceleracion(pos, vel)
 
-    # Método de Euler para actualizar velocidad y posición
+    # M?todo de Euler para actualizar velocidad y posici?n
     vel += dt * accel
     pos += dt * vel
 
@@ -46,5 +47,27 @@ def sysCall_actuation():
         pos = 0
         vel = 0
 
-    # Actualizar posición en CoppeliaSim
+    # Actualizar posici?n en CoppeliaSim
     sim.setObjectPosition(object_handle, -1, [0, 0, pos])
+
+   
+
+
+
+def sysCall_sensing():
+
+    # put your sensing code here
+
+    pass
+
+
+
+def sysCall_cleanup():
+
+    # do some clean-up here
+
+    pass
+
+
+
+# See the user manual or the available code snippets for additional callback functions and details
