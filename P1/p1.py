@@ -48,7 +48,7 @@ for i in range(0, len(t_eval) - 1):
 
 # Graficar resultados
 plt.plot(t_eval[:len(pos)], pos, label='Posición vertical')
-plt.axhline(y=y0[0] - tam_cuerda, color='r', linestyle='--', label='Longitud de la cuerda')
+plt.axhline(y=y0[0] - tam_cuerda, color='r', linestyle='--', label='Comienzo frenado cuerda')
 plt.axhline(y=0, color='k', linestyle='-', label='Suelo')
 plt.legend()
 plt.xlabel('Tiempo (s)')
