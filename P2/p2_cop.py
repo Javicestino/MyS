@@ -12,7 +12,7 @@ J = m1 * l1**2 + m2 * l2**2
 # Estado del sistema
 theta = 0.0
 omega = 0.0
-h = 0.01
+
 t = 0.0
 tiempo_total = 10.0
 caida = False
@@ -30,8 +30,8 @@ pos_masa2_base = [0, 0, 0]
 
 def caida_libre_step(pos, vel):
     accel = -g
-    vel += h * accel
-    pos += h * vel
+    vel += sim.getSimulationTimeStep()* accel
+    pos += sim.getSimulationTimeStep()* vel
     if pos <= 0:
         pos = 0
         vel = 0
@@ -66,8 +66,8 @@ def sysCall_actuation():
         # Ecuación del movimiento angular (Euler)
         k = m1 * g * l1 * np.cos(theta) - m2 * g * l2 * np.cos(theta)
         alpha = k / J
-        omega += h * alpha
-        theta += h * omega
+        omega += sim.getSimulationTimeStep() * alpha
+        theta += sim.getSimulationTimeStep() * omega
 
         # Alturas relativas
         z1 = -l1 * np.sin(theta)
@@ -87,7 +87,8 @@ def sysCall_actuation():
         pos, vel = caida_libre_step(pos, vel)
         sim.setObjectPosition(masa1, -1, [pos_masa1_base[0], pos_masa1_base[1], pos])
 
-    t += h
+    t += sim.getSimulationTimeStep()
+
 
 def sysCall_sensing():
     pass
