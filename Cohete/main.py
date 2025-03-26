@@ -39,11 +39,6 @@ empuje_total_e1 = 7607 # kN a nivel de mar
 
 
 
-
-
-
-
-
 def gravedad_tierra():
     return 0
 

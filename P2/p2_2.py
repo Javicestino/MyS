@@ -12,7 +12,7 @@ g = 9.81  # Aceleración debido a la gravedad (m/s^2)
 J = m1 * l1**2 + m2 * l2**2
 
 # Condiciones iniciales
-theta0 = 0.0  # Ángulo inicial (rad)
+theta0 = 0.0  # Áºngulo inicial (rad)
 omega0 = 0.0  # Velocidad angular inicial (rad/s)
 y0 = [theta0, omega0]  # Vector de condiciones iniciales [theta, omega]
 
