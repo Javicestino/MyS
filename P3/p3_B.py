@@ -11,11 +11,7 @@ car_length = 1.25       # longitud de cada coche
 k = 1000.0              # constante elástica del choque
 
 def car_collision_force_analysis(m1, m2, Fm1, Fm2, b1, b2, k, total_time, dt, car_length):
-    """
-    Simula la colisión entre dos coches usando un modelo de fuerza elástica (resorte).
-    Se considera que los motores actúan hasta que se detecta el inicio de la colisión.
-    Tras el choque, los motores se apagan y la interacción se rige por la fuerza del resorte.
-    """
+   
     t_eval = np.arange(0, total_time, dt)
     num_steps = len(t_eval)
     y_euler = np.zeros((4, num_steps))

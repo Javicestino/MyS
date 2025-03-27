@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 # Parámetros del sistema
 m1 = 1.0  # Masa 1 (kg)
-m2 = 1.25  # Masa 2 (kg)
+m2 = 2.0  # Masa 2 (kg)
 l1 = 1.0  # Longitud 1 (m)
 l2 = 1.0  # Longitud 2 (m)
 g = 9.81  # Aceleración debido a la gravedad (m/s^2)
@@ -12,12 +12,12 @@ g = 9.81  # Aceleración debido a la gravedad (m/s^2)
 J = m1 * l1**2 + m2 * l2**2
 
 # Condiciones iniciales
-theta0 = 0.0  # Ángulo inicial (rad)
+theta0 = 0.0  # Áºngulo inicial (rad)
 omega0 = 0.0  # Velocidad angular inicial (rad/s)
 y0 = [theta0, omega0]  # Vector de condiciones iniciales [theta, omega]
 
 # Parámetros de la simulación
-tf = 10.0  # Tiempo final (s)
+tf = 3.0  # Tiempo final (s)
 h = 0.001  # Paso de tiempo (s)
 t_eval = np.arange(0, tf, h)  # Vector de tiempos
 
@@ -86,40 +86,48 @@ omega = y_euler[1, :]
 # Cálculo de las posiciones verticales de las masas
 x1 = -l1 * np.sin(theta)
 x2 = l2 * np.sin(theta)
-
 # Encontrar el índice donde comienza la caída libre
 indice_caida_libre = np.argmax(abs(theta) > np.radians(45))
 
 # Gráficas
-plt.figure(figsize=(12, 8))
+plt.figure(figsize=(12, 10))
 
-# Ángulo theta en función del tiempo
+# 1. Ángulo theta en función del tiempo
 plt.subplot(3, 1, 1)
-plt.plot(t_eval, np.degrees(theta), label='θ(t)')
+plt.plot(t_eval[:indice_caida_libre], np.degrees(theta[:indice_caida_libre]), 'b-', label='θ(t) (Balancín)')
+plt.plot(t_eval[indice_caida_libre:], np.degrees(theta[indice_caida_libre:]), 'b--', label='θ(t) (Caída libre)')
 plt.xlabel('Tiempo (s)')
 plt.ylabel('Ángulo (grados)')
 plt.title('Ángulo del balancín en función del tiempo')
 plt.legend()
 plt.grid()
 
-# Posición vertical de las masas en función del tiempo
+# 2. Posición vertical de las masas en función del tiempo
 plt.subplot(3, 1, 2)
-plt.plot(t_eval, x1, label='x1(t)')
-plt.plot(t_eval, x2, label='x2(t)')
-if indice_caida_libre < len(t_eval):
-    plt.plot(t_eval[indice_caida_libre:], pos[indice_caida_libre:], 'g--', label='Caída libre')
+plt.plot(t_eval[:indice_caida_libre], x1[:indice_caida_libre], 'r-', label='x1(t) (Balancín)')
+plt.plot(t_eval[:indice_caida_libre], x2[:indice_caida_libre], 'g-', label='x2(t) (Balancín)')
+plt.plot(t_eval[indice_caida_libre:], pos[indice_caida_libre:], 'r--', label='x1(t) (Caída libre)')
+plt.plot(t_eval[indice_caida_libre:], x2[indice_caida_libre:], 'g--', label='x2(t) (Caída libre)')
 plt.xlabel('Tiempo (s)')
 plt.ylabel('Posición vertical (m)')
 plt.title('Posición vertical de las masas en función del tiempo')
 plt.legend()
 plt.grid()
 
-# Posición vertical durante la caída libre
+# 3. Velocidades de las masas en función del tiempo
 plt.subplot(3, 1, 3)
-plt.plot(t_eval, pos, label='Posición vertical')
-plt.axhline(y=0, color='k', linestyle='-', label='Suelo')
-plt.legend()
+# Velocidad angular (omega) antes y después de la caída libre
+plt.plot(t_eval[:indice_caida_libre], omega[:indice_caida_libre], 'm-', label='m2 (Balancín)')
+plt.plot(t_eval[indice_caida_libre:], omega[indice_caida_libre:], 'm--', label='m2 (Caída libre)')
+# Velocidad lineal de la masa 1 antes y después de la caída libre
+v1 = omega * -l1  # Velocidad lineal de la masa 1
+plt.plot(t_eval[:indice_caida_libre], v1[:indice_caida_libre], 'c-', label='m1 (Balancín)')
+plt.plot(t_eval[indice_caida_libre:], vel[indice_caida_libre:], 'c--', label='m1 (Caída libre)')
 plt.xlabel('Tiempo (s)')
-plt.ylabel('Posición (m)')
+plt.ylabel('Velocidad (rad/s o m/s)')
+plt.title('Velocidades de las masas en función del tiempo')
+plt.legend()
 plt.grid()
+
+plt.tight_layout()
 plt.show()
